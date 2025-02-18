@@ -29,14 +29,14 @@ func SeedDB(gormDB *gorm.DB) {
 				Title: "Do laundry",
 				Description: "Take a clothing basket to a washing machine and use two cup of laundry detergent.",
 				Status: "Pending",
-				DueDate: "17:00:00 17/02/2025",
+				DueDate: helpers.GetCurrentTimeVN().String(),
 				Priority: 2,
 			},
 			{
 				Title: "Water vegetable",
 				Description: "Water cabbage with manure.",
 				Status: "Completed",
-				DueDate: "6:00:00 17/02/2025",
+				DueDate: helpers.GetCurrentTimeVN().String(),
 				Priority: 3,
 			},
 		}
@@ -52,7 +52,7 @@ func SeedDB(gormDB *gorm.DB) {
 		}
 
 		users = append(users, db.User{
-			Name: "User-" + strconv.Itoa(i),
+			Name: "User" + strconv.Itoa(i),
 			Password: hashPassword,
 			Status: true,
 			Todos: todos,

@@ -23,3 +23,26 @@ func UserLoginExec(req *requests.UserLoginRequest, userJWTSubject *helpers.UserJ
 
 	return nil
 }
+
+func UserRegisterExec(req *requests.UserRegisterRequest, userJWTSubject *helpers.UserJWTSubject) (error) {
+	var user *db.User
+
+	if res := helpers.GormDB.Debug().Table("user").Where("name = ?", req.Name).Find(&user); res.RowsAffected > 0 {
+		return errors.New("user name existed")
+	}
+
+	if req.Password != req.RePassword {
+		return errors.New("repassword wrong")
+	}
+
+	if hashPassword, err := helpers.HashPassword(req.Password); err == nil {
+		user.Name = req.Name
+		user.Password = hashPassword
+
+		helpers.GormDB.Create(&user)
+
+		return nil
+	}
+
+	return errors.New("cannot hash password")
+}

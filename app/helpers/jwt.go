@@ -32,6 +32,18 @@ type Signature struct {
 	PayloadEncode string
 }
 
+func GetTokenSubject(jwt string) UserJWTSubject{
+	var jwtElement = strings.Split(strings.Trim(jwt, "Bearer "), ".")
+
+	var payload Payload
+
+	payloadJson, _ := base64.RawURLEncoding.DecodeString(jwtElement[1])
+
+	json.Unmarshal(payloadJson, &payload)
+
+	return payload.Sub
+}
+
 func GenerateToken(user UserJWTSubject) string {
 	var secretKey = os.Getenv("SECRET_KEY")
 
@@ -77,13 +89,13 @@ func GenerateToken(user UserJWTSubject) string {
 	return token
 }
 
-func CheckJWT(jwt string, tokenType string) error {
+func CheckJWT(jwt string) error {
 	var secretKey = os.Getenv("SECRET_KEY")
 
 	var jwtElement = strings.Split(strings.Replace(jwt, "Bearer", "", -1), ".")
 
 	if jwt == "" || len(jwtElement) != 3 {
-		return errors.New("Token not found")
+		return errors.New("token not found")
 	}
 	
 	// Start check valid token
@@ -105,7 +117,7 @@ func CheckJWT(jwt string, tokenType string) error {
 	signatureEncode := base64.RawURLEncoding.EncodeToString(signatureHmac)
 
 	if check := signatureEncode == jwtElement[2]; !check {
-		return errors.New("Token not valid")
+		return errors.New("token not valid")
 	}
 	// End check valid token
 	
@@ -121,7 +133,7 @@ func CheckJWT(jwt string, tokenType string) error {
 	currentTime := GetCurrentTimeVN()
 
 	if checkTime := currentTime.Before(exp); !checkTime {
-		return errors.New("Token expired")
+		return errors.New("token expired")
 	}
 	// End check exp token
 

@@ -10,7 +10,7 @@ import (
 func AuthGuard(c *gin.Context) {
 	var jwt string = c.GetHeader("Authorization")
 
-	if err := helpers.CheckJWT(jwt, "access"); err != nil {
+	if err := helpers.CheckJWT(jwt); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": gin.H{
 				"message": err.Error(),

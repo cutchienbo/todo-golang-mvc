@@ -15,6 +15,9 @@ import (
 // @description This is a todo API.
 // @host localhost:1006
 // @BasePath /api/v1
+// @SecurityDefinitions.Apikey JWT
+// @In header
+// @Name Authorization
 
 func main() {
 	err := godotenv.Load()

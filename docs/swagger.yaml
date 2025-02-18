@@ -5,5 +5,118 @@ info:
   description: This is a todo API.
   title: TodoAPI
   version: "1.0"
-paths: {}
+paths:
+  /:
+    post:
+      consumes:
+      - application/json
+      description: Use to filter todo by title, status, due date, priority
+      parameters:
+      - description: Todo title, status, dateFrom, dateStart, priority
+        in: body
+        name: filterData
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Filter Todo
+      tags:
+      - todos
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: Use to create todo
+      parameters:
+      - description: Todo title, description, dueDate, priority
+        in: body
+        name: createData
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Create Todo
+      tags:
+      - todos
+  /delete:
+    delete:
+      consumes:
+      - application/json
+      description: Use to delete todo
+      parameters:
+      - description: Todo todoId
+        in: body
+        name: deleteData
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Delete Todo
+      tags:
+      - todos
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Login todo website by name and password
+      parameters:
+      - description: User name and password
+        in: body
+        name: name&password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Login
+      tags:
+      - users
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Register todo website by name, password and rePassword
+      parameters:
+      - description: User name, password, rePassword
+        in: body
+        name: name&password&rePassword
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Register
+      tags:
+      - users
+  /update:
+    patch:
+      consumes:
+      - application/json
+      description: Use to update todo
+      parameters:
+      - description: Todo todoId, updateField, updateValue
+        in: body
+        name: updateData
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Update Todo
+      tags:
+      - todos
+securityDefinitions:
+  JWT:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"
