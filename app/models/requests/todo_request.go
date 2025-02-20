@@ -1,11 +1,13 @@
 package requests
 
 type FilterTodoResquest struct {
-	Title    string `json:"title" binding:"omitempty"`
-	Status   string `json:"status" binding:"oneof=Pending Progressing Completed Canceled All"`
-	DateFrom string `json:"dateFrom" binding:"omitempty"`
-	DateTo   string `json:"dateTo" binding:"omitempty"`
-	Priority int    `json:"priority" binding:"oneof=0 1 2 3"`
+	Title       string `json:"title" binding:"omitempty"`
+	Status      string `json:"status" binding:"oneof=Pending Progressing Completed Canceled All"`
+	DateFrom    string `json:"dateFrom" binding:"omitempty"`
+	DateTo      string `json:"dateTo" binding:"omitempty"`
+	Priority    int    `json:"priority" binding:"oneof=0 1 2 3"`
+	CurrentPage int	   `json:"currentPage" binding:"required"`
+	Limit		int	   `json:"limit" binding:"required"`
 	// Title    string `json:"title"`
 	// Status   string `json:"status"`
 	// DateFrom string `json:"date_from"`
@@ -22,9 +24,9 @@ type CreateTodoRequest struct {
 }
 
 type UpdateTodoRequest struct {
-	TodoId 		uint	`json:"todoId" binding:"required"`
-	UpdateField string 	`json:"updateField" binding:"required,oneof=title description status due_date priority"`
-	UpdateValue string 	`json:"updateValue" binding:"required"`
+	TodoId      uint   `json:"todoId" binding:"required"`
+	UpdateField string `json:"updateField" binding:"required,oneof=title description status due_date priority"`
+	UpdateValue string `json:"updateValue" binding:"required"`
 }
 
 type DeleteTodoRequest struct {

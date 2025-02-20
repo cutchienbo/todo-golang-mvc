@@ -3,7 +3,8 @@ package responses
 import "golang-mvc/app/models/db"
 
 type FilterTodoResponse struct {
-	Todos []db.Todo
+	Todos 		[]db.Todo
+	TotalPage 	int
 }
 
 type CreateTodoResponse struct {

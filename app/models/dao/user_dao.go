@@ -11,11 +11,11 @@ func UserLoginExec(req *requests.UserLoginRequest, userJWTSubject *helpers.UserJ
 	var user *db.User
 
 	if res := helpers.GormDB.Debug().Table("user").Where("name = ?", req.Name).Find(&user); res.RowsAffected == 0 {
-		return errors.New("user name wrong")
+		return errors.New("username wrong")
 	}
 
 	if res := helpers.CheckPasswordHash(req.Password, user.Password); !res {
-		return errors.New("user password wrong")
+		return errors.New("password wrong")
 	}	
 
 	userJWTSubject.Id = user.ID
@@ -28,11 +28,11 @@ func UserRegisterExec(req *requests.UserRegisterRequest, userJWTSubject *helpers
 	var user *db.User
 
 	if res := helpers.GormDB.Debug().Table("user").Where("name = ?", req.Name).Find(&user); res.RowsAffected > 0 {
-		return errors.New("user name existed")
+		return errors.New("username existed")
 	}
 
 	if req.Password != req.RePassword {
-		return errors.New("repassword wrong")
+		return errors.New("confirm password wrong")
 	}
 
 	if hashPassword, err := helpers.HashPassword(req.Password); err == nil {

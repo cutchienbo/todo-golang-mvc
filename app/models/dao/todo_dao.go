@@ -6,6 +6,7 @@ import (
 	"golang-mvc/app/models/db"
 	"golang-mvc/app/models/requests"
 	"golang-mvc/app/models/responses"
+	"math"
 	"time"
 )
 
@@ -35,9 +36,18 @@ func FilterTodoExec(userId uint, req *requests.FilterTodoResquest, res *response
 		priority = []int{req.Priority}
 	}
 
-	if err := helpers.GormDB.Debug().Table("todo").Where("title LIKE ?", "%" + req.Title + "%").Where("status LIKE ?", status).Where("due_date BETWEEN ? AND ?", dateFrom, dateTo).Where("priority IN ?", priority).Where("user_id = ?", userId).Where("deleted_at IS NULL").Find(&res.Todos); err == nil {
-		return errors.New("todo empty")
+	var totalRecord int64
+
+	query := helpers.GormDB.Debug().Table("todo").Where("title LIKE ?", "%" + req.Title + "%").Where("status LIKE ?", status).Where("due_date BETWEEN ? AND ?", dateFrom, dateTo).Where("priority IN ?", priority).Where("user_id = ?", userId).Where("deleted_at IS NULL");
+
+	if(query.RowsAffected == 0){
+		return errors.New("todolist empty")
 	}
+
+	query.Count(&totalRecord)
+
+	res.TotalPage = int(math.Ceil(float64(totalRecord) / float64(req.Limit)))
+	query.Offset((req.CurrentPage - 1) * req.Limit).Take(req.Limit).Find(res.Todos)
 
 	return nil
 }

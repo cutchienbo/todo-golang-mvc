@@ -24,6 +24,17 @@ paths:
       summary: Filter Todo
       tags:
       - todos
+  /auth/checkToken:
+    get:
+      consumes:
+      - application/json
+      description: Use to check jwt token
+      produces:
+      - application/json
+      responses: {}
+      summary: Check Valid Token
+      tags:
+      - auth
   /create:
     post:
       consumes:

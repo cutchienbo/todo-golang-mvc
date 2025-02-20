@@ -5,8 +5,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-
-	"github.com/gorilla/handlers"
 	"github.com/joho/godotenv"
 )
 
@@ -27,14 +25,6 @@ func main() {
 	}
 
 	route := app.Init()
-
-	corsHandler := handlers.CORS(
-		handlers.AllowedOrigins([]string{"*"}), // Cho phép tất cả các origin
-		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"}), // Các phương thức HTTP được phép
-		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}), // Các header cho phép
-	)(route)
-
-	http.Handle("/", corsHandler)
 
 	port := os.Getenv("PORT")
 

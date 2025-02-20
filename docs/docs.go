@@ -42,6 +42,22 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/auth/checkToken": {
+            "get": {
+                "description": "Use to check jwt token",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Check Valid Token",
+                "responses": {}
+            }
+        },
         "/create": {
             "post": {
                 "description": "Use to create todo",
