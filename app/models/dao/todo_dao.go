@@ -38,16 +38,29 @@ func FilterTodoExec(userId uint, req *requests.FilterTodoResquest, res *response
 
 	var totalRecord int64
 
-	query := helpers.GormDB.Debug().Table("todo").Where("title LIKE ?", "%" + req.Title + "%").Where("status LIKE ?", status).Where("due_date BETWEEN ? AND ?", dateFrom, dateTo).Where("priority IN ?", priority).Where("user_id = ?", userId).Where("deleted_at IS NULL");
+	query := helpers.GormDB.Debug().Table("todo").
+		Where("title LIKE ?", "%"+req.Title+"%").
+		Where("status LIKE ?", status).
+		Where("due_date BETWEEN ? AND ?", dateFrom, dateTo).
+		Where("priority IN (?)", priority).
+		Where("user_id = ?", userId).
+		Where("deleted_at IS NULL")
 
-	if(query.RowsAffected == 0){
+	if err := query.Count(&totalRecord).Error; err != nil {
+		return err
+	}
+
+	if totalRecord == 0 {
 		return errors.New("todolist empty")
 	}
 
-	query.Count(&totalRecord)
+	query = query.Offset((req.CurrentPage - 1) * req.Limit).Limit(req.Limit)
+
+	if err := query.Find(&res.Todos).Error; err != nil {
+		return err
+	}
 
 	res.TotalPage = int(math.Ceil(float64(totalRecord) / float64(req.Limit)))
-	query.Offset((req.CurrentPage - 1) * req.Limit).Take(req.Limit).Find(res.Todos)
 
 	return nil
 }
